@@ -3,6 +3,8 @@ const mongoose = require("mongoose")
 const cors = require("cors")
 const cookieParser = require("cookie-parser");
 require("dotenv").config();
+const authenticateUser = require("./src/middleware/authenticateUser");
+const { connectToMongoDB } = require("./src/connect");
 
 const app = express();
 app.use(cookieParser());
@@ -10,16 +12,13 @@ app.use(cors());
 app.use(express.json());
 
 const taskRoutes = require('./src/routes/taskRoutes')
-const authRoutes = require('./src/routes/authRoute')
-app.use("/api/", taskRoutes);
+const authRoutes = require('./src/routes/authRoute');
+
+app.use("/api/tasks", authenticateUser,taskRoutes);
 app.use("/auth/", authRoutes);
 
 
-mongoose.connect(process.env.CONNECTION_STRING, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-})
-
+connectToMongoDB(process.env.CONNECTION_STRING)
 const db = mongoose.connection;
 
 db.on("error", (error) => {

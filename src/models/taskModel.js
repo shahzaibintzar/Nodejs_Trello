@@ -7,7 +7,7 @@ const taskSchema = new mongoose.Schema(
     description: { type: String, required: false },
     category: { type: String, required: false },
     dueDate: { type: String, required: false },
-    priority: { type: String, required: false },
+    priority: { type: Number, required: false },
     email: { type: String, required: false },
   },
   { collection: "tasks", versionKey: false }
